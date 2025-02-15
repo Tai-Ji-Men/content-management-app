@@ -1,0 +1,14 @@
+**/target/
+**/.settings/
+**/.classpath
+**/.project
+**/.metadata/
+**/.recommenders/
+**/MySamples/
+**/MySample/
+**/logs/
+**/.DS_Store
+**/.springBeans
+**/.pmd
+**/.idea/
+
