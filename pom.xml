@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.tjm</groupId>
-	<artifactId>content-management-app</artifactId>
+	<artifactId>contentManagementApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>content-management-app</name>
 	<description>Content Management App for TJM US Website</description>
@@ -30,6 +30,21 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+		<!-- Java MongoDB Driver dependency -->
+
+<!--		<dependency>-->
+<!--			<groupId>org.mongodb</groupId>-->
+<!--			<artifactId>mongodb-driver-sync</artifactId>-->
+<!--			<version>5.3.0</version>-->
+<!--		</dependency>-->
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -73,6 +88,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

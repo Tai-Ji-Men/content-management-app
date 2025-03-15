@@ -1,4 +1,4 @@
-package com.tjm.content_management_app;
+package com.tjm.contentManagementApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
