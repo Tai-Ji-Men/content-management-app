@@ -4,12 +4,14 @@ import com.mongodb.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.connection.ConnectionPoolSettings;
 import org.bson.Document;
 
-public class TJMMongoConnection {
+import java.util.concurrent.TimeUnit;
 
+public class TJMMongoConnection {
     public static void connect() {
-        String connectionString = "mongodb+srv://edwardtao1994:NP5JLTvJfR2XtCkK@cluster0.uthl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        String connectionString = "mongodb+srv://edwardtao1994:taojiayou1994@cluster0.uthl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
@@ -25,6 +27,7 @@ public class TJMMongoConnection {
                 database.runCommand(new Document("ping", 1));
                 System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
             } catch (MongoException e) {
+                System.out.println("Error when connecting to Mongo DB!!!");
                 e.printStackTrace();
             }
         }
