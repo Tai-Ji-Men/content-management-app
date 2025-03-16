@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.tjm.content-management-app' is invalid and this project uses 'com.tjm.content_management_app' instead.
+* The original package name 'com.tjm.content-management-app' is invalid and this project uses 'com.tjm.contentManagementApp' instead.
 
 # Getting Started
 

@@ -1,4 +1,4 @@
-package com.tjm.contentManagementApp.common;
+package com.tjm.common;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoClient;

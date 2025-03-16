@@ -1,9 +1,12 @@
-package com.tjm.contentManagementApp.common;
+package com.tjm.common;
 
 public class GlobalContextLoader {
     public static void loadContext() {
         // load db connections
         TJMMongoConnection.connect();
-        // some other setup before running the application
+        // setup config manager
+        //
+
+
     }
 }
