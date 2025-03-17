@@ -1,6 +1,7 @@
 package com.tjm.configmanager;
 
 import org.apache.commons.configuration.CombinedConfiguration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.DatabaseConfiguration;
 import org.apache.commons.configuration.tree.OverrideCombiner;
 
@@ -11,12 +12,13 @@ public class ConfigManager {
     private DatabaseConfiguration databaseConfiguration;
     private List<String> priorities = Arrays.asList("propertiesFromDB", "staticConfiguration", "databaseConfiguration");
     private Map<String, CombinedConfiguration> configMap;
+    private CombinedConfiguration config;
 
-    public ConfigManager(Map<String, CombinedConfiguration> configMap) throws Exception {
-        if (configMap == null || configMap.size() == 0) {
+    public ConfigManager(CombinedConfiguration config) throws Exception {
+        if (config == null || config.isEmpty()) {
             throw new Exception("Cannot create Config Manager without a Configuration");
         }
-        this.configMap = configMap;
+        this.config = config;
 //        logger.debug("Created config manager for: " + getContextName());
 //        buildConfig();
     }
@@ -58,6 +60,21 @@ public class ConfigManager {
 //        //rdar://82262535: Avoid using this function as it will likely print sensitive information to the logs
 //        //printConfiguration();
 //    }
+
+    public String getPropertyString(String propertyName, String defaultValue) {
+
+        String value = getConfiguration().getString(propertyName);
+
+        if (value == null) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    private Configuration getConfiguration() {
+        return this.config;
+    }
 
 
 }

@@ -47,36 +47,9 @@ public class TJMConfigManagerFactory {
             CombinedConfiguration staticConfiguration = new CombinedConfiguration();
             staticConfiguration.setNodeCombiner(new OverrideCombiner());
             loadAllProperties(staticConfiguration);
-
-            HashMap<String, CombinedConfiguration> configurationMap = new HashMap<String, CombinedConfiguration>();
-
-            configurationMap.put("staticConfiguration", staticConfiguration);
-
-            propFromDBConfiguration.setNodeCombiner(new OverrideCombiner());
-            configurationMap.put("propertiesFromDB", propFromDBConfiguration);
-
-            ConfigManager configManager = new ConfigManager(configurationMap);
-//            configManager.setContextName(contextName);
-//            configMap.put(contextName, configManager);
-            //below block commented out during Property consolidation activity. Reload folder was removed as part of activity making the below block redundant
-            /**ScheduledExecutorService executor = ScheduledExecutor.getExecutor();
-             FileChangeNotifier fileChangeNotifier = new FileChangeNotifier();
-             fileChangeNotifier.initializeConfiguration(contextName);
-             executor.execute(fileChangeNotifier);
-             updated Temporarily the value from 0 to 10800 to fix the NullPointer issue in some report jobs
-             executor.scheduleAtFixedRate(fileChangeNotifier, 10800, 10, TimeUnit.SECONDS);
-             logger.info("<<file change notifier terminated>>  " + executor.isTerminated());**/
+            config = new ConfigManager(staticConfiguration);
 
         } catch (Exception exc) {
-
-            //Catch all the Exceptions and throw RunTime exception from here
-//            logger.error(
-//                    "Exception occurred in configuring the configmanager for context  "
-//                            + contextName, exc);
-//            ReconConfigManagerException reconException = new ReconConfigManagerException(exc);
-//            reconException.setContext(contextName);
-//            reconException.setFatal(true);
-//            reconException.setModule("Configuration Manager");
             throw new RuntimeException("exception happened in TJMConfigManagerFactory");
         }
     }
