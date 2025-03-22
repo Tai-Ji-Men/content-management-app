@@ -40,7 +40,6 @@ public final class MongoDBFactory {
         if(config == null){
             config = TJMConfigManagerFactory.getConfigManager();
         }
-
         return getMongoDB(dbName).getCollection(collectionName);
     }
 
