@@ -8,6 +8,7 @@ phases:
       commands:
         - echo Build Completed.
 artifacts:
-  files:
-    - target/tjm-content-management-app-server.jar
-  discard-paths: yes
+    base-directory: tjm-web-app/target
+    files:
+      - tjm-content-management-app-server.jar
+    discard-paths: yes
