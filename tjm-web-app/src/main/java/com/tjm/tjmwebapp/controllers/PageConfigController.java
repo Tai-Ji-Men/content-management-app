@@ -4,6 +4,7 @@ import com.tjm.common.mongo.MongoDBFactory;
 import com.tjm.mongo.models.TJMMongoCollection;
 import com.tjm.mongo.models.TJMWriteConcern;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class PageConfigController {
             ObjectId _id = testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);
         }catch(Exception e) {
             String errorMsg = e.getMessage();
-            return "errMsg: " + errorMsg + ". stack trace: " + e.getStackTrace().toString();
+            return "errMsg: " + errorMsg + ". stack trace: " + ExceptionUtils.getStackTrace(e);
         }
         return "test";
     }
