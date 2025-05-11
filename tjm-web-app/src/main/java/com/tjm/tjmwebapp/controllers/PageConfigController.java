@@ -1,11 +1,14 @@
 package com.tjm.tjmwebapp.controllers;
 
 import com.tjm.common.mongo.MongoDBFactory;
+import com.tjm.configmanager.TJMConfigManagerFactory;
 import com.tjm.mongo.models.TJMMongoCollection;
 import com.tjm.mongo.models.TJMWriteConcern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,8 @@ import java.util.Map;
 @RequestMapping("/tjm/api/v1")
 public class PageConfigController {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(PageConfigController.class);
+
     // create a GET API handler.
     public PageConfigController() {
         // nothing
@@ -24,7 +29,7 @@ public class PageConfigController {
 
     @GetMapping("/test")
     public String testHandler() {
-        System.out.println("testHandler got triggered!!");
+        LOGGER.info("testHandler got triggered!!");
         try {
             TJMMongoCollection testCollection = MongoDBFactory.getAcctCollection("test", "test");
             System.out.println(testCollection.toString());

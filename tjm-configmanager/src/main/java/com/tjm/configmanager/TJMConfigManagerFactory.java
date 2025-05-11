@@ -6,6 +6,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.tree.OverrideCombiner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TJMConfigManagerFactory {
+    private static Logger LOGGER = LoggerFactory.getLogger(TJMConfigManagerFactory.class);
+
     public static final HashMap<String, ConfigManager> configMap = new HashMap<String, ConfigManager>();
     private static final String[] FILE_FILTER_EXTENSION = new String[]{"properties"};
     public static ConfigManager config = null;
@@ -49,6 +53,7 @@ public class TJMConfigManagerFactory {
             loadAllProperties(staticConfiguration);
             config = new ConfigManager(staticConfiguration);
         } catch (Exception exc) {
+            LOGGER.error("err happened. {}", exc);
             throw new RuntimeException("exception happened in TJMConfigManagerFactory");
         }
     }
@@ -84,6 +89,7 @@ public class TJMConfigManagerFactory {
                 }
             }
         }catch(Exception e) {
+            LOGGER.error("Error happened in iterateDirectory(). e: {}", e);
             throw new RuntimeException("exception happened in iterateDirectory()");
         }
 
