@@ -48,7 +48,6 @@ public class TJMConfigManagerFactory {
             staticConfiguration.setNodeCombiner(new OverrideCombiner());
             loadAllProperties(staticConfiguration);
             config = new ConfigManager(staticConfiguration);
-
         } catch (Exception exc) {
             throw new RuntimeException("exception happened in TJMConfigManagerFactory");
         }
@@ -64,26 +63,30 @@ public class TJMConfigManagerFactory {
     }
 
     private static synchronized void iterateDirectory(
-            CombinedConfiguration combinedConfiguration, String propertiesPath)
-            throws IOException, ConfigurationException {
+            CombinedConfiguration combinedConfiguration, String propertiesPath) {
 
-        File f = new File(propertiesPath);
+        try {
+            File f = new File(propertiesPath);
 
-        List<File> files = (List<File>) FileUtils.listFiles(f, FILE_FILTER_EXTENSION, Boolean.TRUE);
-        for (File file : files) {
-            if (isUnderTarget(file)) {
-                // do nothing. ignore
-                System.out.println("the path ignored when constructing configManager: " + file.getCanonicalPath());
-            } else {
-                PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
-                /**This will ensure that all properties are treated as String.The Delimiter parsing will be disabled**/
-                propertiesConfiguration.setDelimiterParsingDisabled(true);
-                /**end**/
-                propertiesConfiguration.load(file.getCanonicalPath());
-                String configFileName = FilenameUtils.removeExtension(file.getName());
-                combinedConfiguration.addConfiguration(propertiesConfiguration, configFileName);
+            List<File> files = (List<File>) FileUtils.listFiles(f, FILE_FILTER_EXTENSION, Boolean.TRUE);
+            for (File file : files) {
+                if (isUnderTarget(file)) {
+                    // do nothing. ignore
+                    System.out.println("the path ignored when constructing configManager: " + file.getCanonicalPath());
+                } else {
+                    PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+                    /**This will ensure that all properties are treated as String.The Delimiter parsing will be disabled**/
+                    propertiesConfiguration.setDelimiterParsingDisabled(true);
+                    /**end**/
+                    propertiesConfiguration.load(file.getCanonicalPath());
+                    String configFileName = FilenameUtils.removeExtension(file.getName());
+                    combinedConfiguration.addConfiguration(propertiesConfiguration, configFileName);
+                }
             }
+        }catch(Exception e) {
+            throw new RuntimeException("exception happened in iterateDirectory()");
         }
+
     }
 
     public static boolean isUnderTarget(File file) throws IOException {
