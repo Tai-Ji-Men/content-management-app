@@ -24,12 +24,16 @@ public class PageConfigController {
     @GetMapping("/test")
     public String testHandler() {
         System.out.println("testHandler got triggered!!");
-        TJMMongoCollection testCollection = MongoDBFactory.getAcctCollection("test", "test");
-        System.out.println(testCollection.toString());
-        Map<String, Object> map = new HashMap<>();
-        map.put("test123", "aaaabbbbcccc");
-        ObjectId _id = testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);
-        System.out.println(_id.toString());
+        try {
+            TJMMongoCollection testCollection = MongoDBFactory.getAcctCollection("test", "test");
+            System.out.println(testCollection.toString());
+            Map<String, Object> map = new HashMap<>();
+            map.put("test123", "aaaabbbbcccc");
+            ObjectId _id = testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);
+        }catch(Exception e) {
+            String errorMsg = e.getMessage();
+            return "errMsg: " + errorMsg + ". stack trace: " + e.getStackTrace().toString();
+        }
         return "test";
     }
 
