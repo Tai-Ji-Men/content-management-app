@@ -4,6 +4,7 @@ import com.tjm.common.mongo.MongoDBFactory;
 import com.tjm.mongo.models.TJMMongoCollection;
 import com.tjm.mongo.models.TJMWriteConcern;
 import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,19 @@ public class PageConfigController {
     public String testHandler() {
         System.out.println("testHandler got triggered!!");
         TJMMongoCollection testCollection = MongoDBFactory.getAcctCollection("test", "test");
+        System.out.println(testCollection.toString());
         Map<String, Object> map = new HashMap<>();
         map.put("test123", "aaaabbbbcccc");
-        testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);
+        ObjectId _id = testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);
+        System.out.println(_id.toString());
         return "test";
     }
+
+    @GetMapping("/test1")
+    public String test1Handler() {
+        return "test11111";
+    }
+
 
     @GetMapping("/config")
     public ResponseEntity<Map<String, Object>> getConfig(
