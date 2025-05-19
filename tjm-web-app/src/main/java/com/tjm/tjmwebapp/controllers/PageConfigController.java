@@ -33,6 +33,7 @@ public class PageConfigController {
         try {
             TJMMongoCollection testCollection = MongoDBFactory.getAcctCollection("test", "test");
             System.out.println(testCollection.toString());
+            System.out.println("Test config val: " + TJMConfigManagerFactory.getConfigManager().getPropertyString("test.key", "aaaaa"));
             Map<String, Object> map = new HashMap<>();
             map.put("test123", "aaaabbbbcccc");
             ObjectId _id = testCollection.insert(map, TJMWriteConcern.ACKNOWLEDGED);

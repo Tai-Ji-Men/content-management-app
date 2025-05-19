@@ -8,12 +8,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 public class TJMConfigManagerFactory {
     private static Logger LOGGER = LoggerFactory.getLogger(TJMConfigManagerFactory.class);
@@ -63,8 +66,58 @@ public class TJMConfigManagerFactory {
             CombinedConfiguration combinedConfiguration)
             throws Exception {
         // calculate the path
-        String tjmCoreAppParentPath = System.getProperty("user.dir");
-        iterateDirectory(combinedConfiguration, tjmCoreAppParentPath);
+//        String tjmCoreAppParentPath = System.getProperty("user.dir");
+//        iterateDirectory(combinedConfiguration, tjmCoreAppParentPath);
+
+        // look in src/main/resources/config/*.properties inside your JAR
+        Logger LOGGER = LoggerFactory.getLogger(TJMConfigManagerFactory.class);
+        PathMatchingResourcePatternResolver resolver =
+                new PathMatchingResourcePatternResolver();
+
+        // Only pick up *.properties at the root of your JAR's classpath
+        Resource[] rootProps = resolver.getResources("classpath*:/*.properties");
+        Resource[] configProps = resolver.getResources("classpath*:configproperties/*.properties");
+        Resource[] allProps = Stream.concat(Arrays.stream(rootProps), Arrays.stream(configProps))
+                .toArray(Resource[]::new);
+        Set<String> usedNames = new HashSet<>();
+
+        for (Resource res : allProps) {
+            if (!res.isReadable()) continue;
+
+            String filename = res.getFilename();
+            if (filename == null) continue;
+
+            // Skip any POM or META-INF metadata files
+            String uri = res.getURI().toString();
+            if (uri.contains("/META-INF/")) {
+                LOGGER.debug("Skipping non-app config: {}", uri);
+                continue;
+            }
+
+            // Derive a base name and ensure uniqueness
+            String base = FilenameUtils.removeExtension(filename);
+            String name = base;
+            int suffix = 1;
+            while (usedNames.contains(name)) {
+                name = base + "_" + (suffix++);
+            }
+            usedNames.add(name);
+
+            // Load into Commons Configuration
+            PropertiesConfiguration props = new PropertiesConfiguration();
+            props.setDelimiterParsingDisabled(true);
+            try (InputStream in = res.getInputStream()) {
+                props.load(in);
+            }
+
+            combinedConfiguration.addConfiguration(props, name);
+            LOGGER.info("Loaded [{}] from {}", name, uri);
+        }
+
+        if (combinedConfiguration.isEmpty()) {
+            throw new IllegalStateException(
+                    "No .properties found on the classpath – your CombinedConfiguration is empty");
+        }
     }
 
     private static synchronized void iterateDirectory(
