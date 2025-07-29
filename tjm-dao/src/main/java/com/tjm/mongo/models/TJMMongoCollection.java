@@ -10,9 +10,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TJMMongoCollection {
 
@@ -85,6 +83,19 @@ public class TJMMongoCollection {
 
     public Map<String, Object> findOne(Map<String, Object> query) {
         return this.commonFindOne(query, null);
+    }
+
+    public TJMFindIterable find(Map<String, Object> ref) {
+        final Instant startInstant = Instant.now();
+        Map<String, Object> params = new HashMap<String, Object>();
+        try {
+            params.put(COLLECTION_NAME_STR, this.collection.getNamespace().getCollectionName());
+            return new TJMFindIterable(collection.find(Util.massageMap(ref)));
+        } catch (MongoException mongoException) {
+            throw new RuntimeException(mongoException);
+        } finally {
+//            logCrudOperations(OPERATIONTYPE.FIND, startInstant, ref, null, null, params, null, true,collection.getNamespace().getCollectionName());
+        }
     }
 
     private Map<String, Object> commonFindOne(Map<String, Object> map, Map<String, Object> projection) {

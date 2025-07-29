@@ -52,8 +52,8 @@ public class PageConfigController {
 
     @GetMapping("/config")
     public ResponseEntity<Map<String, Object>> getConfig(
-            @RequestParam(name = "type") String pageName,
-            @RequestParam(name = "subType", required = false) String subPage) {
+            @RequestParam(name = "pageId") String pageName,
+            @RequestParam(name = "subPageId", required = false) String subPage) {
         Map<String, Object> fetchQuery = new HashMap<>();
         if(StringUtils.isEmpty(pageName)) {
             Map<String, Object> errorRes = new HashMap<>();
@@ -61,12 +61,13 @@ public class PageConfigController {
             errorRes.put("message", "type is missing in the request.");
             return ResponseEntity.badRequest().body(errorRes);
         }
+        fetchQuery.put("pageName", pageName);
         if(StringUtils.isNotEmpty(subPage)) {
-            fetchQuery.put("subType", subPage);
+            fetchQuery.put("subPageName", subPage);
         }
         try {
             // Simulate fetching configuration from MongoDB
-            TJMMongoCollection uiConfigCollection = MongoDBFactory.getAcctCollection("TJM", "TJMUIConfig");
+            TJMMongoCollection uiConfigCollection = MongoDBFactory.getAcctCollection("TJM_USA_UIClient", "TJMUIComponentConfig");
             Map<String, Object> configRes = uiConfigCollection.findOne(fetchQuery);
             return ResponseEntity.ok(configRes);
         } catch (Exception e) {
