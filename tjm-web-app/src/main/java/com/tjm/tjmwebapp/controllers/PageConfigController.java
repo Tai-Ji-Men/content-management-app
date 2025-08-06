@@ -18,6 +18,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/tjm/api/v1")
+// TODO: temp fix
+@CrossOrigin(origins = "https://tjm-usa-client-ui.netlify.app")
 public class PageConfigController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(PageConfigController.class);
